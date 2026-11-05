@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لـ نونتي (RAWDA) ❤️</title>
+  <style>
+    :root {
+      --primary-rose: #ff4d6d;
+      --soft-pink: #fff0f3;
+      --deep-red: #c9184a;
+      --gold: #ffb703;
+      --dark-text: #590d22;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffccd5 0%, #ffb3c1 50%, #ff8fa3 100%);
+      color: var(--dark-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Roses Layer */
+    #rose-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .falling-rose {
+      position: absolute;
+      top: -50px;
+      font-size: 24px;
+      animation: fall linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.2;
+      }
+    }
+
+    /* Passcode Lock Screen */
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 240, 243, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: all 0.8s ease;
+    }
+
+    .lock-card {
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(201, 24, 74, 0.2);
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+      border: 2px solid #ffb3c1;
+    }
+
+    .lock-card h2 {
+      color: var(--deep-red);
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .lock-card input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ff8fa3;
+      border-radius: 15px;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+      margin-bottom: 15px;
+      transition: border 0.3s;
+      color: var(--dark-text);
+    }
+
+    .lock-card input:focus {
+      border-color: var(--primary-rose);
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
+    }
+
+    .lock-card button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #ff4d6d, #c9184a);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(201, 24, 74, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .lock-card button:active {
+      transform: scale(0.97);
+    }
+
+    .error-msg {
+      color: #d90429;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Music Control Button */
+    .music-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--primary-rose);
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      font-size: 20px;
+    }
+
+    .music-btn.playing {
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main App Layout */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 15px 60px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+
+    /* Header & Frame */
+    .profile-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
+      border-radius: 30px;
+      padding: 25px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border: 2px solid #fff;
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 15px auto;
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ff4d6d;
+      box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+    }
+
+    .rose-garland {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 50%;
+      border: 3px dashed #ff8fa3;
+      pointer-events: none;
+      animation: rotateGarland 20s linear infinite;
+    }
+
+    @keyframes rotateGarland {
+      100% { transform: rotate(360deg); }
+    }
+
+    .badge-tag {
+      display: inline-block;
+      background: var(--primary-rose);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .profile-card h1 {
+      color: var(--deep-red);
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    .profile-card p {
+      color: #800f2f;
+      font-size: 16px;
+    }
+
+    /* Counter Card */
+    .timer-card {
+      background: linear-gradient(135deg, #ffffff, #fff0f3);
+      border-radius: 25px;
+      padding: 20px 15px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border: 1px solid #ffccd5;
+    }
+
+    .timer-card h3 {
+      color: var(--deep-red);
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .timer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .timer-unit {
+      background: var(--soft-pink);
+      padding: 10px 5px;
+      border-radius: 15px;
+      border: 1px solid #ff8fa3;
+    }
+
+    .timer-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--deep-red);
+      display: block;
+    }
+
+    .timer-label {
+      font-size: 11px;
+      color: #a4133c;
+    }
+
+    /* Letter Card */
+    .letter-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 25px;
+      padding: 25px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-right: 5px solid var(--primary-rose);
+      line-height: 1.8;
+      font-size: 16px;
+      color: #590d22;
+    }
+
+    .letter-card h3 {
+      color: var(--deep-red);
+      margin-bottom: 12px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Poetry & Reasons Grid */
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .reason-box {
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+      border: 1px solid #ffccd5;
+      transition: transform 0.3s;
+    }
+
+    .reason-box:hover {
+      transform: translateY(-3px);
+    }
+
+    .reason-box h4 {
+      color: var(--deep-red);
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .reason-box p {
+      font-size: 15px;
+      color: #590d22;
+      line-height: 1.5;
+    }
+
+    /* Interaction Action Area */
+    .action-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(201, 24, 74, 0.1);
+    }
+
+    .action-card h3 {
+      color: var(--deep-red);
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .buttons-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      min-height: 70px;
+    }
+
+    .btn-yes {
+      background: linear-gradient(45deg, #2ec4b6, #208b81);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 20px;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(46, 196, 182, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-yes:active {
+      transform: scale(0.95);
+    }
+
+    .btn-no {
+      background: linear-gradient(45deg, #e63946, #d90429);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 20px;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      transition: all 0.2s ease;
+      box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+    }
+
+    /* Modal Celebration */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 30px;
+      padding: 30px 20px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-content h2 {
+      color: var(--deep-red);
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      font-size: 16px;
+      color: #590d22;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .close-btn {
+      background: var(--primary-rose);
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Roses Layer -->
+  <div id="rose-container"></div>
+
+  <!-- Music Control Button -->
+  <div class="music-btn" id="musicBtn" onclick="toggleAudio()">🌹</div>
+
+  <!-- Audio Element -->
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Lock Screen Screen -->
+  <div id="lock-screen">
+    <div class="lock-card">
+      <h2>افتحي قلبك والموقع 🌹</h2>
+      <input type="password" id="passInput" placeholder="">
+      <button onclick="checkPass()">دخول ❤️</button>
+      <div class="error-msg" id="errorMsg">الباسوورد مش صح، جربي تاني يا نونتي!</div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="container">
+
+    <!-- Profile Header Card -->
+    <div class="profile-card">
+      <div class="image-wrapper">
+        <div class="rose-garland"></div>
+        <img src="1000027515.webp" alt="RAWDA">
+      </div>
+      <span class="badge-tag">RAWDA</span>
+      <h1>نونتي الصغنونة ❤️</h1>
+      <p>أنتِ مش بس حبيبتي، أنتِ بنتي وروحي وكل دنيتي 🌹</p>
+    </div>
+
+    <!-- Timer Counter -->
+    <div class="timer-card">
+      <h3>عدي عليا كام يوم من ساعت ما قابلت اجمل بنت في الدنيا؟ ⏳✨</h3>
+      <div class="timer-grid">
+        <div class="timer-unit">
+          <span class="timer-value" id="days">0</span>
+          <span class="timer-label">يوم</span>
+        </div>
+        <div class="timer-unit">
+          <span class="timer-value" id="hours">0</span>
+          <span class="timer-label">ساعة</span>
+        </div>
+        <div class="timer-unit">
+          <span class="timer-value" id="minutes">0</span>
+          <span class="timer-label">دقيقة</span>
+        </div>
+        <div class="timer-unit">
+          <span class="timer-value" id="seconds">0</span>
+          <span class="timer-label">ثانية</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heartfelt Letter -->
+    <div class="letter-card">
+      <h3>🌹 جواب اعتذار لـ بنتي ونونتي</h3>
+      <p>
+        نونتي الجميلة.. أنا آسف إن زعلتك مني في أي لحظة. أنتِ عارفة إن مكانتك عندي ملهاش حصر، وأني بحس دايماً إنك بنتي الصغيرة قبل ما تكوني حبيبتي. الدنيا دي كلها بتبقى ملهاش طعم وأنتِ زعلانة مني.. الموقع ده عملته مخصوص بالورد اللي بتحبيه عشان تشوفي ضحكتك القمر دي تاني. سامحيني يا روضة! ❤️
+      </p>
+    </div>
+ <div class="letter-card">
+         <h3> بعشقك ي نونتي ♥️ </h3>   
+      <p>
+ يا رَوْضَةَ الحُسْنِ يا شَمْساً بِآفَاقِي
+
+يَا مَنْ لَكِ الرُّوحُ فِي شَوْقٍ وَإِشْرَاقِ
+
+عَيْنَاكِ جَنَّةُ عِشْقٍ زَادَنِي شَغَفاً
+
+وَوَجْنَتَاكِ كَوَرْدٍ بَيْنَ أَوْرَاقِ
+
+قَلْبِي بِحُبِّكِ يَا رَوْضِي يَمُوتُ حَيَاً
+
+وَأَنْتِ بَلْسَمُ آلامِي وَمِعْثَاقِي
+
+إِنِّي رَأَيْتُكِ مَلاَكاً لاَ شَبِيهَ لَهُ
+
+فَرِقَّتِ الرُّوحُ فِي شَوْقٍ وَعَنّاقِ
+
+يَا نَفْحَةَ الوردِ يا زَهْراً يُعَطِّرُنِي
+
+أَنْتِ المُنَى وَهَوَى الرُّوحِ وَمِيثَاقِي
+
+
+      </p>
+    </div>
+
+    <!-- Poetry & Sweet Words -->
+    <div class="reasons-grid">
+      <div class="reason-box">
+        <h4>🌸 يا ست البنات</h4>
+        <p>الدنيا من غير ضحكتك بتبقى ضالمة ومفيهاش روح، وأنتِ الوردة الوحيدة اللي منورة حياتي كلها.</p>
+      </div>
+
+      <div class="reason-box">
+        <h4>✨ المكانة الخاصة</h4>
+        <p>أنتِ بنتي اللي بخاف عليها من أي حاجة وحشة في الدنيا، ومستحيل أستحمل أشوفك زعلانة مني.</p>
+      </div>
+
+      <div class="reason-box">
+        <h4>❤️ وعد مني</h4>
+        <p>أوعدك إن ضحكتك دي مش هتروح، وهفضل دايماً أعمل كل اللي يرحك ويخليكي مبسوطة يا نونتي.</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-card">
+      <h3>لسه زعلانة من حبيبك؟ 🥺</h3>
+      <div class="buttons-wrapper">
+        <button class="btn-yes" onclick="forgive()">سامحتك طبعاً ❤️</button>
+        <button class="btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">لسه زعلانة 😤</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Forgiveness Modal -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <h2>بحبك يا نونتي! 🎉🌹</h2>
+      <p>أنشأ الله تبقي من نصيبي وربنا يخليكي ليا وما يحرميش من ضحكتك الحلوة دي أبداً يا روضة القلب ❤️</p>
+      <button class="close-btn" onclick="closeModal()">مش ناويه تجيبي بوثة بق 🫣❤️</button>
+    </div>
+  </div>
+
+  <script>
+    // Rose petals creation
+    function createRoses() {
+      const container = document.getElementById('rose-container');
+      const symbols = ['🌹', '🌸', '🌺', '✨', '❤️'];
+      for (let i = 0; i < 25; i++) {
+        const rose = document.createElement('div');
+        rose.className = 'falling-rose';
+        rose.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        rose.style.left = Math.random() * 100 + 'vw';
+        rose.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        rose.style.animationDelay = Math.random() * 5 + 's';
+        rose.style.fontSize = (Math.random() * 15 + 18) + 'px';
+        container.appendChild(rose);
+      }
+    }
+    createRoses();
+
+    // Password Check
+    function checkPass() {
+      const val = document.getElementById('passInput').value.trim();
+      if (val === "1/1/2009" || val === "01/01/2009" || val === "112009" || val === "01012009") {
+        document.getElementById('lock-screen').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('lock-screen').style.display = 'none';
+          playMusic();
+        }, 800);
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    }
+
+    // Music Player Control
+    const audio = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    let isPlaying = false;
+
+    function playMusic() {
+      audio.play().then(() => {
+        isPlaying = true;
+        musicBtn.classList.add('playing');
+      }).catch(err => {
+        console.log("Audio autoplay prevented by browser");
+      });
+    }
+
+    function toggleAudio() {
+      if (isPlaying) {
+        audio.pause();
+        musicBtn.classList.remove('playing');
+        isPlaying = false;
+      } else {
+        audio.play();
+        musicBtn.classList.add('playing');
+        isPlaying = true;
+      }
+    }
+
+    // Evading No Button Logic
+    const noBtn = document.getElementById('noBtn');
+    const noTexts = [
+      "متقدرش تضغط هنا 😜",
+      "فك الكشرة بقى! ❤️",
+      "نونتي بتسامح بسرعة 😊",
+      "الزرار بيجري منك! 🏃‍♂️",
+      "بحبك والنعمة 🌹"
+    ];
+    let textIdx = 0;
+
+    function moveButton() {
+      const x = Math.random() * (window.innerWidth > 350 ? 150 : 80) - 75;
+      const y = Math.random() * 80 - 40;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+      noBtn.innerText = noTexts[textIdx];
+      textIdx = (textIdx + 1) % noTexts.length;
+    }
+
+    // Modal Forgiveness Display
+    function forgive() {
+      document.getElementById('successModal').style.display = 'flex';
+      burstHearts();
+    }
+
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+    }
+
+    function burstHearts() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.innerText = '🌹';
+        heart.style.position = 'fixed';
+        heart.style.left = '50%';
+        heart.style.top = '50%';
+        heart.style.fontSize = '24px';
+        heart.style.zIndex = '1001';
+        heart.style.pointerEvents = 'none';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 150 + 50;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        
+        heart.animate([
+          { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.5)`, opacity: 0 }
+        ], {
+          duration: 1200,
+          easing: 'ease-out'
+        });
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1200);
+      }
+    }
+
+    // Live Counter Calculation
+    const startDate = new Date('2025-03-31T00:00:00');
+
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - startDate;
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / 1000 / 60) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById('days').innerText = days;
+        document.getElementById('hours').innerText = hours;
+        document.getElementById('minutes').innerText = minutes;
+        document.getElementById('seconds').innerText = seconds;
+      }
+    }
+    setInterval(updateCounter, 1000);
+    updateCounter();
+
+    // Tap Interaction Floating Elements
+    document.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+        const elem = document.createElement('div');
+        elem.innerText = Math.random() > 0.5 ? '🌹' : '❤️';
+        elem.style.position = 'fixed';
+        elem.style.left = e.clientX + 'px';
+        elem.style.top = e.clientY + 'px';
+        elem.style.fontSize = '20px';
+        elem.style.pointerEvents = 'none';
+        elem.style.zIndex = '999';
+        
+        elem.animate([
+          { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+          { transform: 'translate(-50%, -100px) scale(1.4)', opacity: 0 }
+        ], {
+          duration: 1000,
+          easing: 'ease-out'
+        });
+
+        document.body.appendChild(elem);
+        setTimeout(() => elem.remove(), 1000);
+      }
+    });
+  </script>
+</body>
+</html>
